@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+    <form method="post" action="/NewWord">
+      <div>
+        <div><input placeholder="word" name="word"/></div>
+        <div><input placeholder="description" name="description"/></div>
+        <div><input placeholder="EnMeaning" name="EnMeaning"/></div>
+        <div><input placeholder="FaMeaning" name="qFaMeaning"/></div>
+        <div><select name="category">
+          <% for(var i = 0; i < categories.length; i++) { %>
+            <option value='<%= categories[i].Id %>'><%= categories[i].Name %></option>
+          <% } %>
+        </select></div>
+        <div><input type="submit" value="Add New Word"/></div>
+      </div>
+    </form>
+  </body>
+</html>
