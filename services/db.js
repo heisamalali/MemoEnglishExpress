@@ -13,26 +13,23 @@ const config = {
     }
 }
 
-async function executeQuery(query,values=[],paramNames =[],isStoredProcedure = true, outputParamName = null) {
+async function executeQuery(query,params,isStoredProcedure = true, outputParamName = null) {
     try {
         const pool = await sql.connect(config);
         const request = pool.request();
 
-        if(values && paramNames){
-            for(let i=0;i<values.length;i++){
-                request.input(paramNames[i],values[i])
+        if(params){
+            for(let param in params){
+                if(typeof params[param] === 'undefined'){
+                    console.error(`Undefined value found for ${param}`)
+                }
+                request.input(param,params[param])
             }
         }
 
         if(outputParamName){
             request.output(outputParamName,sql.Int);
         }
-
-        values.forEach((val,index)=>{
-            if(typeof val === 'undefined'){
-                console.error(`Undefined value found for ${paramNames[index]}`)
-            }
-        })
 
         let result;
         if(isStoredProcedure){
