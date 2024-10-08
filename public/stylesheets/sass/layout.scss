@@ -1,0 +1,25 @@
+.main-wrapper {
+    display: flex;
+    flex-direction: row-reverse;
+    height: calc(100vh - 50px);
+}
+
+.sidebar-wrapper {
+    width: 300px; 
+    height: 100%;
+    background-color: blue;
+  }
+  
+  .body-wrapper {
+    width : calc(100vw - 300px);
+    height: 100%;
+    background-color: #eee;
+  }
+
+  .header-wrapper {
+    height: 25px;
+  }
+
+  .footer-wrapper {
+    height: 25px;
+  }

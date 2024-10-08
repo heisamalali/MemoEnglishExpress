@@ -6,8 +6,23 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
 </head>
 <body>
-    <p>hello</p>
-    <%- body %>
+    <div>
+        <div class="header-wrapper">
+            <%- include('header.ejs') %>
+        </div>
+            <div class="main-wrapper">
+                <div class="sidebar-wrapper">
+                    <%- include('sidebar.ejs') %>
+                </div>
+                <div class="body-wrapper">
+                    <%- body %>
+                </div>
+            </div>
+            <div class="footer-wrapper">
+                <%- include('footer.ejs') %>
+            </div>
+    </div>
+    
     <script src="/js/bootstrap.js"></script>
 </body>
 </html>
