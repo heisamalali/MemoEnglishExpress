@@ -1,0 +1,18 @@
+.menu-item {
+    ul {
+        list-style: none;
+        padding-left: 0;
+        li {
+            a {
+                line-height: normal;
+                font-size: 14px;
+                padding: 10px 10px 10px 11px;
+                color: white !important;
+                display: block;
+                font-weight: 400;
+                text-decoration: none !important;
+                position: relative;
+            }
+        }
+    }
+}
