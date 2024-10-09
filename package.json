@@ -7,6 +7,7 @@
     "compile:sass": "node-sass ./public/stylesheets/sass/main.scss ./public/stylesheets/style.css"
   },
   "dependencies": {
+    "ag-grid-community": "^32.2.2",
     "bootstrap": "^5.3.3",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",

@@ -1,0 +1,32 @@
+<div>
+    <div id="myGrid" class="ag-theme-balham" style="width: 100%;"></div>
+</div>
+
+<script>
+    var data = JSON.parse('<%- JSON.stringify(data) %>')
+    console.log(data)
+    const gridOptions = {
+        // Row Data: The data to be displayed.
+        rowData: data,
+        // Column Definitions: Defines the columns to be displayed.
+        columnDefs: [
+            { field: 'Item' },
+            { field: 'Description' },
+            { field: 'ItemMeaningEn' },
+            { field: 'ItemMeaningFa' },
+            { field: 'ItemSynonymEn' },
+            { field: 'Example' },
+        ],
+        defaultColDef: {
+            filter: "agTextColumnFilter",
+            floatingFilter: true,
+        },
+        pagination: true,
+        paginationPageSize: 10,
+        paginationPageSizeSelector: [10, 25, 50]
+    };
+
+    // Your Javascript code to create the Data Grid
+    const myGridElement = document.querySelector('#myGrid');
+    agGrid.createGrid(myGridElement, gridOptions);
+</script>
