@@ -10,12 +10,15 @@
         rowData: data,
         // Column Definitions: Defines the columns to be displayed.
         columnDefs: [
-            { field: 'Item' },
+            { headerName: "Row",
+            valueGetter: "node.rowIndex + 1" },
+            { field: 'Item' ,headerName : "Word"},
             { field: 'Description' },
             { field: 'ItemMeaningEn' },
             { field: 'ItemMeaningFa' },
             { field: 'ItemSynonymEn' },
             { field: 'Example' },
+            { field: 'CategoryName' },
         ],
         defaultColDef: {
             filter: "agTextColumnFilter",
