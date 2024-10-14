@@ -19,15 +19,16 @@ router.get('/', async function (req, res, next) {
 
 /* Add new word */
 router.post('/NewWord', async function (req, res, next) {
-  const addItemRequest = new AddItemRequest(
-    req.body.word,
-    req.body.description,
-    req.body.enMeaning,
-    req.body.faMeaning,
-    req.body.synonymEn,
-    req.body.example,
-    req.body.category,
-  )
+  const addItemRequest ={
+    Word : req.body.word,
+    Description : req.body.description,
+    ItemMeaningEn : req.body.enMeaning,
+    ItemMeaningFa : req.body.faMeaning,
+    ItemSynonymEn: req.body.synonymEn,
+    Example: req.body.example,
+    Pronunciation : req.body.pronunciation,
+    CategoryId: req.body.category,
+  }
   try {
     console.log('addItemRequest', addItemRequest)
     var addMemoItemRes = await executeQuery('[dbo].[AddMemoItem]', addItemRequest)

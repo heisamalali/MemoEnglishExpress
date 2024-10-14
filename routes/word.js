@@ -17,4 +17,27 @@ router.get('/allwords', async function (req, res, next) {
   res.render('word',apiResponse);
 });
 
+/* GET home page. */
+router.get('/review', async function (req, res, next) {
+
+  let apiResponse = new ApiResponse(false,'','','')
+  console.log('Request from Get',req.query);
+  var queryParams = {
+    Skip : req.query?.skip ?? 0,
+    CategoryId : req.query?.categoryId
+  }
+  var reviewRes = await executeQuery('[dbo].[GetWordForReview]',queryParams);
+  var categoriesRes = await executeQuery('[dbo].[GetMemoCategories]');
+  apiResponse.data = {
+    words : reviewRes.recordset,
+    categories : categoriesRes.recordset
+  }
+
+  if(req.query?.error){
+    apiResponse.message = req.query?.error
+  }
+  console.log(apiResponse);
+  res.render('review',apiResponse);
+});
+
 module.exports = router;

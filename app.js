@@ -12,6 +12,7 @@ var app = express();
 
 // view engine setup
 app.use("/",express.static("./node_modules/bootstrap/dist/"));
+app.use("/",express.static("./node_modules/jquery/dist/"));
 app.use("/",express.static("./node_modules/ag-grid-community/dist/"));
 app.set('views',
   [

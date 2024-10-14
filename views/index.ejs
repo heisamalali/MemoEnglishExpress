@@ -37,6 +37,10 @@
                     name="example" required/>
                 </div>
                 <div class="mb-3">
+                  <input type="text" class="form-control is-valid" id="pronunciation" placeholder="Pronunciation"
+                    name="pronunciation"/>
+                </div>
+                <div class="mb-3">
                   <select class="form-control is-valid" id="category" name="category">
                     <% for(var i=0; i < data.length; i++) { %>
                       <option value='<%= data[i].Id %>'>
