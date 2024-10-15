@@ -40,4 +40,38 @@ router.get('/review', async function (req, res, next) {
   res.render('review',apiResponse);
 });
 
+router.get('/categories', async function (req, res, next) {
+
+  let apiResponse = new ApiResponse(false,'','','')
+  var categoriesRes = await executeQuery('[dbo].[GetMemoCategories]');
+  apiResponse.data = categoriesRes.recordset
+  if(req.query?.error){
+    apiResponse.message = req.query?.error
+  }
+  console.log(apiResponse);
+  res.json(apiResponse);
+});
+
+router.post('/editword', async function (req, res, next) {
+
+  let apiResponse = new ApiResponse(false,'','','')
+  const params = {
+    Id : req.body.Id,
+    Item : req.body.Item,
+    Description : req.body.Description,
+    ItemMeaningEn : req.body.ItemMeaningEn,
+    ItemMeaningFa : req.body.ItemMeaningFa,
+    ItemSynonymEn : req.body.ItemSynonymEn,
+    Example : req.body.Example,
+    Pronunciation : req.body.Pronunciation,
+    CategoryId : req.body.CategoryId,
+  }
+  await executeQuery('[dbo].[EditMemoItem]',params);
+  if(req.query?.error){
+    apiResponse.message = req.query?.error
+  }
+  console.log(apiResponse);
+  res.json(apiResponse);
+});
+
 module.exports = router;

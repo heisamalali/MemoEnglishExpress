@@ -1,57 +1,53 @@
 <div>
     <div id="myGrid" class="ag-theme-balham" style="width: 100%;"></div>
-    <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+    <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel"
+        tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalToggleLabel">Modal 1</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalToggleLabel">Modal 1</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="mb-3">
+                            <input type="text" class="form-control is-valid" id="word" name="word"
+                                placeholder="English word" required />
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" class="form-control is-valid" id="description" placeholder="Description"
+                                name="description" />
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" class="form-control is-valid" id="enMeaning"
+                                placeholder="English meaning" name="enMeaning" required />
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" class="form-control is-valid" id="faMeaning" placeholder="Farsi Meaning"
+                                name="faMeaning" required />
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" class="form-control is-valid" id="synonymEn" placeholder="SynonymEn"
+                                name="synonymEn" />
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" class="form-control is-valid" id="example" placeholder="Example"
+                                name="example" required />
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" class="form-control is-valid" id="pronunciation"
+                                placeholder="Pronunciation" name="pronunciation" />
+                        </div>
+                        <div class="mb-3">
+                            <select class="form-control is-valid" id="category" name="category">
+                            </select>
+                        </div>
+                        <div><button class="btn btn-primary" onclick="editWord()">Edit word<button></div>
+                    </div>
+                </div>
             </div>
-            <div class="modal-body">
-                <div class="form-row">
-                    <div class="mb-3">
-                      <input type="text" class="form-control is-valid" id="word" name="word" placeholder="English word"
-                        required />
-                    </div>
-                    <div class="mb-3">
-                      <input type="text" class="form-control is-valid" id="description" placeholder="Description"
-                        name="description" />
-                    </div>
-                    <div class="mb-3">
-                      <input type="text" class="form-control is-valid" id="enMeaning" placeholder="English meaning"
-                        name="enMeaning" required/>
-                    </div>
-                    <div class="mb-3">
-                      <input type="text" class="form-control is-valid" id="faMeaning" placeholder="Farsi Meaning"
-                        name="faMeaning" required/>
-                    </div>
-                    <div class="mb-3">
-                      <input type="text" class="form-control is-valid" id="synonymEn" placeholder="SynonymEn"
-                        name="synonymEn"/>
-                    </div>
-                    <div class="mb-3">
-                      <input type="text" class="form-control is-valid" id="example" placeholder="Example"
-                        name="example" required/>
-                    </div>
-                    <div class="mb-3">
-                      <input type="text" class="form-control is-valid" id="pronunciation" placeholder="Pronunciation"
-                        name="pronunciation"/>
-                    </div>
-                    <!-- <div class="mb-3">
-                      <select class="form-control is-valid" id="category" name="category">
-                        <% for(var i=0; i < data.length; i++) { %>
-                          <option value='<%= data[i].Id %>'>
-                            <%= data[i].Name %>
-                          </option>
-                          <% } %>
-                      </select>
-                    </div> -->
-                    <div><input class="btn btn-primary" type="submit" value="Edit Word" /></div>
-                  </div>
-            </div>
-          </div>
         </div>
-      </div>
+    </div>
 </div>
 
 <script>
@@ -77,9 +73,9 @@
                 headerName: "Action",
                 cellRenderer: function (params) {
                     var eDiv = document.createElement('div');
-                    eDiv.innerHTML = '<a class="btn btn-sm btn-light btn-simple">'+
-                        '<span style="color: Dodgerblue;">'+
-                            '<i class="fa-regular fa-pen-to-square"></i></span></a>';
+                    eDiv.innerHTML = '<a class="btn btn-sm btn-light btn-simple">' +
+                        '<span style="color: Dodgerblue;">' +
+                        '<i class="fa-regular fa-pen-to-square"></i></span></a>';
                     var eButton = eDiv.querySelectorAll('.btn-simple')[0];
 
                     eButton.addEventListener('click', function () {
@@ -103,9 +99,11 @@
     const myGridElement = document.querySelector('#myGrid');
     agGrid.createGrid(myGridElement, gridOptions);
 
+    let categories = null;
+    let editItem = null;
     function editWordClicked(params) {
-        var editItem = {...params.data}
-        console.log('edititem',editItem)
+        editItem = { ...params.data }
+        console.log('edititem', editItem)
         $('#exampleModalToggle').modal('show');
         $('#word').val(params.data.Item)
         $('#description').val(params.data.Description)
@@ -114,5 +112,78 @@
         $('#synonymEn').val(params.data.ItemSynonymEn)
         $('#example').val(params.data.Example)
         $('#pronunciation').val(params.data.Pronunciation)
+        if (!categories) {
+            $.ajax({
+                url: `/word/categories`,
+                cache: false,
+                success: function (response) {
+                    console.log('response categories', response)
+                    categories = response.data
+                    renderSelect()
+                }
+            });
+        } else {
+            renderSelect()
+        }
+    }
+
+    function renderSelect() {
+        let optionHTML = ''
+        $('#category').children().remove();
+        categories.forEach(category => {
+            optionHTML = `
+            <option value="${category.Id}"> 
+                ${category.Name} 
+            </option>`;
+            $('#category').append(optionHTML);
+        });
+
+        $('#category').val(editItem.CategoryId);
+
+    }
+
+    setTimeout(() => {
+        $('#word,#description,#enMeaning,#faMeaning,#synonymEn,#example,#pronunciation').on('input', function (e) {
+            switch (e.target.id) {
+                case 'word':
+                    editItem = { ...editItem, Item: $(this).val() }
+                    break;
+                case 'description':
+                    editItem = { ...editItem, Description: $(this).val() }
+                    break;
+                case 'enMeaning':
+                    editItem = { ...editItem, ItemMeaningEn: $(this).val() }
+                    break;
+                case 'faMeaning':
+                    editItem = { ...editItem, ItemMeaningFa: $(this).val() }
+                    break;
+                case 'synonymEn':
+                    editItem = { ...editItem, ItemSynonymEn: $(this).val() }
+                    break;
+                case 'example':
+                    editItem = { ...editItem, Example: $(this).val() }
+                    break;
+                case 'pronunciation':
+                    editItem = { ...editItem, Pronunciation: $(this).val() }
+                    break;
+            }
+        });
+        $('#category').on('change', function (e) {
+            var optionSelected = $(this).find("option:selected");
+            var valueSelected = optionSelected.val();
+            var textSelected = optionSelected.text();
+            editItem = { ...editItem, CategoryId: valueSelected,CategoryName:textSelected  }
+        });
+    }, 100);
+
+    function editWord() {
+        $.ajax({
+                type: "POST",
+                url: `/word/editword`,
+                data: editItem,
+                success: function (response) {
+                    $('#exampleModalToggle').modal('hide');
+                }
+            });
     }
 </script>
