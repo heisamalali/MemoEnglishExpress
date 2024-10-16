@@ -40,6 +40,28 @@ router.get('/review', async function (req, res, next) {
   res.render('review',apiResponse);
 });
 
+router.get('/wordsToLearn', async function (req, res, next) {
+
+  let apiResponse = new ApiResponse(false,'','','')
+  console.log('Request from Get',req.query);
+  var queryParams = {
+    Skip : req.query?.skip ?? 0,
+    CategoryId : req.query?.categoryId
+  }
+  var reviewRes = await executeQuery('[dbo].[GetWordToLearn]',queryParams);
+  var categoriesRes = await executeQuery('[dbo].[GetMemoCategories]');
+  apiResponse.data = {
+    words : reviewRes.recordset,
+    categories : categoriesRes.recordset
+  }
+
+  if(req.query?.error){
+    apiResponse.message = req.query?.error
+  }
+  console.log(apiResponse);
+  res.render('wordsToLearn',apiResponse);
+});
+
 router.get('/categories', async function (req, res, next) {
 
   let apiResponse = new ApiResponse(false,'','','')

@@ -1,0 +1,82 @@
+<div id="mainReview">
+    <div class="review-filter"></div>
+    <div class="d-flex justify-content-center">
+        <div class="card border-info mb-3" style="width: 40rem;">
+            <div class="card-header text-success">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5>
+                            <%= data.words[0]?.Word %>
+                        </h5>
+                    </div>
+                    <div class="d-flex">
+                        <div>
+                            <select class="form-control is-valid" id="category" name="category">
+                                <% for(var i=0; i < data.categories.length; i++) { %>
+                                    <option value='<%= data.categories[i].Id %>'>
+                                        <%= data.categories[i].Name %>
+                                    </option>
+                                    <% } %>
+                            </select>
+                        </div>
+                        <div>
+                            <a class="btn" onclick="reset()">
+                                <i class="fa-regular fa-arrows-rotate"></i>
+                            </a>
+                            <a class="btn" onclick="nextWordRequested()">
+                                Next
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body text-info">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <div class="text-danger">معنی فارسی</div>
+                        <h6 class="card-title blur-content" id="meaningFa">
+                            <%= data.words[0]?.Meaning %>
+                        </h6>
+                    </div>
+                    <div>
+                        <a class="btn" onclick="toggleBlur('meaningFa')">
+                            <i class="fa-thin fa-eye"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    let skip = 0;
+    function toggleBlur(elementId) {
+        var el = $(`#${elementId}`);
+        if (el.hasClass('blur-content')) {
+            el.removeClass('blur-content')
+        } else {
+            el.addClass('blur-content')
+        }
+    }
+
+    function nextWordRequested() {
+        skip++;
+        var categoryId = $('#category').find(":selected").val();
+        console.log(categoryId)
+        $.ajax({
+            url: `/word/wordsToLearn?skip=${skip}&categoryId=${categoryId}`,
+            cache: false,
+            success: function (html) {
+                var mainReview = $($.parseHTML(html)).find("#mainReview");
+                $('#mainReview').html(mainReview.html());
+                $('#category').val(categoryId);
+            }
+        });
+    }
+
+    function reset(){
+        skip = 0 ;
+        nextWordRequested();
+    }
+</script>
